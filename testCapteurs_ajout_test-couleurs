@@ -1,0 +1,105 @@
+# coding: UTF-8 
+""" 
+Script: test_capteur/testCapteur
+Création: admin, le 09/03/2021
+"""
+
+
+# Imports 
+import adafruit_tcs34725
+import adafruit_tca9548a
+import RPi.GPIO
+import busio
+import board
+import time
+# Fonctions
+
+# Programme principal 
+def main():
+# affectation
+    tabCouleurs = []
+    filin = open("fichierCouleurs.txt", "w")
+
+    i2c = busio.I2C(board.SCL, board.SDA)
+    tca = adafruit_tca9548a.TCA9548A(i2c)
+
+# déclaration capteurs
+    sensor0 = adafruit_tcs34725.TCS34725(tca[0])
+    sensor1 = adafruit_tcs34725.TCS34725(tca[1])
+    sensor2 = adafruit_tcs34725.TCS34725(tca[2])
+    sensor3 = adafruit_tcs34725.TCS34725(tca[3])
+
+# activation capteurs
+    sensor0.active = True
+    sensor1.active = True
+    sensor2.active = True
+    sensor3.active = True
+
+    sensor0.gain = 4
+    sensor1.gain = 4
+    sensor2.gain = 4
+    sensor3.gain = 4
+
+    sensor0.integration_time = 50
+    sensor1.integration_time = 50
+    sensor2.integration_time = 50
+    sensor3.integration_time = 50
+
+# lecture capteurs
+    tabCouleurs.append(sensor0.color_rgb_bytes)
+    tabCouleurs.append(sensor1.color_rgb_bytes)
+    tabCouleurs.append(sensor2.color_rgb_bytes)
+    tabCouleurs.append(sensor3.color_rgb_bytes)
+
+# affichage data
+    print(tabCouleurs)
+
+# récupération couleurs uniques
+
+
+# test couleurs selon variances obtenus
+
+    for x in range(0, 4):
+        if (tabCouleurs[x][0] > tabCouleurs[x][1] & tabCouleurs[x][0] > tabCouleurs[x][2]):
+            if (tabCouleurs[x][1] + 100 >= tabCouleurs[x][0] & tabCouleurs[x][2] + 100 >= tabCouleurs[x][0]):
+                if (tabCouleurs[x][1] > tabCouleurs[x][2]):
+                    print("Jaune = capteur", x)
+                if (tabCouleurs[x][2] > tabCouleurs[x][1]):
+                    print("Violet = capteur", x)
+            print("Rouge = capteur", x)
+        elif (tabCouleurs[x][1] > tabCouleurs[x][0] & tabCouleurs[x][1] > tabCouleurs[x][2]):
+            print("Vert = capteur", x)
+        elif (tabCouleurs[x][2] > tabCouleurs[x][0] & tabCouleurs[x][2] > tabCouleurs[x][1]):
+            print("Bleu = capteur", x)
+
+    #garder trace
+    # with open("fichierCouleurs.txt", "w") as filout:
+        # filout.write(data0)
+        # filout.write(data1)
+        # filout.write(data2)
+        # filout.write(data3)
+
+
+
+# 2e partie je déclare les capteurs
+
+
+# empecher les interruptions
+    #tcs.set_interrupt(False)
+
+# lire valeurs RGB
+    #r, g, b, c = tcs.get_raw_data()
+
+# afficher valeurs RGB
+    #print('Color: Red{0} Green{1} Blue{2} Clear{3}'.format(r, g, b, c))
+
+#test récup multiple
+
+
+# fin utilisation
+    #tcs.set_interrupt(True)
+    #tcs.disable()
+
+if __name__ == '__main__':
+    main()
+    # Fin
