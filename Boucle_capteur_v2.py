@@ -62,9 +62,8 @@ def testCaractere(matriceCouleurs):
             chaineCara = chaineCara + ")"
         elif(matriceCouleurs[x][0] == "Vert" and matriceCouleurs[x][1] == "Vert"):
             chaineCara = chaineCara + ""
-
-
     return(chaineCara)
+
 def testCouleurs(data):
     couleur = ""
     if (data[0] > data[1]*2.5 and data[0] > data[2]*2.5):
